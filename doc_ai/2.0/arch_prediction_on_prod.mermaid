@@ -1,0 +1,22 @@
+sequenceDiagram
+   actor user
+   user->>+SnowflakeDB: modelId, docURL
+   SnowflakeDB->>Edward: modelId, docURL
+   activate Edward
+   Edward->>+Parser: docURL
+   deactivate Edward
+   Parser->>-Edward: docSqlId
+   activate Edward
+   Edward->>+XTR: modelId, docSqlId
+   deactivate Edward
+   XTR-->>Model: docTxt, docImg, questions
+   activate Model
+   Model-->>XTR: answers
+   deactivate Model
+   XTR->>-Edward: answersSqlId
+   activate Edward
+   Edward->>SnowflakeDB: answers
+   deactivate Edward
+   SnowflakeDB->>-user: answers
+%%{init:{‘theme’:‘neutral’}}%%
+%%{init:{‘themeCSS’:‘g:nth-of-type(110) rect.actor { stroke:blue;fill: pink; }; g:nth-of-type(115) rect.actor { stroke:blue;fill: pink; };’}}%%
